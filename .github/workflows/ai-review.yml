@@ -1,0 +1,35 @@
+name: AI Code Reviewer
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install Dependencies
+        run: pip install -r requirements.txt
+
+      - name: Get Diff and Run AI
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Get the difference between the PR branch and the main branch
+          git diff origin/${{ github.base_ref }}...HEAD > changes.diff
+          # Run your script and pass the diff file as an argument
+          python .github/scripts/ai_reviewer.py changes.diff
