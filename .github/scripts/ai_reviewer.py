@@ -18,7 +18,7 @@ def main():
         return
 
     # 3. Ask Gemini to review
-    model = genai.GenerativeModel('gemini-2.5-pro')
+    model = genai.GenerativeModel('gemini-1.5-flash')
     prompt = f"""
     You are a Senior Staff Engineer. Review this Git diff for logic errors and security bugs.
     Be concise. Provide feedback as a bulleted list.
