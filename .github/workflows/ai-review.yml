@@ -29,7 +29,6 @@ jobs:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          # Get the difference between the PR branch and the main branch
+          git fetch origin ${{ github.base_ref }} --depth=1
           git diff origin/${{ github.base_ref }}...HEAD > changes.diff
-          # Run your script and pass the diff file as an argument
           python .github/scripts/ai_reviewer.py changes.diff
